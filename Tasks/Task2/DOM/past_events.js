@@ -1,6 +1,8 @@
 const infoEvents = data.events;
 const containerPastEvents = document.getElementById("containerAllCardsPastEvents")
 
+// Compare the current date with event date. If the event date is past, then is gonna save the index from that event on a new array
+
 function filterPastEvents(array){
     const pastEvents = []
     for (let item of array){
