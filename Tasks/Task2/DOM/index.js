@@ -14,7 +14,6 @@ function createCard (list){
         </div>
     </div>`
 
-
 function assignCard(array, element){
     let templateCard = ""
 
