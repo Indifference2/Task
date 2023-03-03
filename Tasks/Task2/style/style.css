@@ -64,7 +64,7 @@ label{
     color: white;
 }
 
-.box_cards_container{
+.box_cards_detail{
     height: 28rem;
 }
 
@@ -73,8 +73,8 @@ label{
 }
 
 .img_detail{
-    width: 20rem;
-    height: 20rem;
+    width: 15rem;
+    height: 10rem;
 }
 
 td{
@@ -85,8 +85,3 @@ table{
     height: 9rem;
 } 
 
-@media only screen and (max-width:767px) and (min-width:320px){
-    .img_detail{
-        height: 10rem;
-    }
-}

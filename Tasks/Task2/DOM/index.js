@@ -10,7 +10,7 @@ function createCard (list){
             <p>${list.description}</p>
             <div class="d-flex justify-content-between align-items-center">
                 <p class="card-text price">Price: $${list.price}</p>
-                <a href="./details.html" class="btn btn-dark">More info</a>
+                <a href="./pages/details.html" class="btn btn-dark">More info</a>
             </div>
         </div>
     </div>`
