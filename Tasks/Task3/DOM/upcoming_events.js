@@ -86,5 +86,7 @@ function filterSearch(dataEvents){
 
 
 function filterSearchCategory(){
-    return filterCategory(filterSearch(filterUpComingEvents), containerUpComingEvents)
+    if(filterCategory(filterSearch(filterUpComingEvents), containerUpComingEvents) == 0){
+        return containerUpComingEvents.innerHTML = `<h2>Event not found</h2>`
+    }return filterCategory(filterSearch(filterUpComingEvents), containerUpComingEvents)
 } 
