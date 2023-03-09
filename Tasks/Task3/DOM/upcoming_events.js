@@ -72,6 +72,9 @@ const form = document.querySelector("form")
 const inputFormSearch = form[0]
 
 inputFormSearch.addEventListener('input', (e) =>{
+    if(filterCategory(filterSearch(filterUpComingEvents), containerUpComingEvents) == 0){
+        return containerUpComingEvents.innerHTML = `<h2>Event not found</h2>`
+    }
     assignCard(filterSearchCategory(), containerUpComingEvents)
 })
 
@@ -86,7 +89,5 @@ function filterSearch(dataEvents){
 
 
 function filterSearchCategory(){
-    if(filterCategory(filterSearch(filterUpComingEvents), containerUpComingEvents) == 0){
-        return containerUpComingEvents.innerHTML = `<h2>Event not found</h2>`
-    }return filterCategory(filterSearch(filterUpComingEvents), containerUpComingEvents)
-} 
+    return filterCategory(filterSearch(filterUpComingEvents), containerUpComingEvents)
+}

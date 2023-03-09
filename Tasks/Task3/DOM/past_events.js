@@ -55,6 +55,9 @@ const inputCheckBoxNodeList = document.querySelectorAll('.form-check-input')
 const arrayCheckBox = Array.from(inputCheckBoxNodeList)
 
 containerCategory.addEventListener('click',(e) => {
+    if(filterCategory(filterSearch(filterPastEvents), containerPastEvents) == 0){
+        return containerPastEvents.innerHTML = `<h2>Event not found</h2>`
+    }
     assignCard(filterSearchCategory(), containerPastEvents)
 })
 
@@ -88,7 +91,5 @@ function filterSearch(dataEvents){
 
 
 function filterSearchCategory(){
-    if(filterCategory(filterSearch(filterPastEvents), containerPastEvents) == 0){
-        return containerPastEvents.innerHTML = `<h2>Event not found</h2>`
-    }return filterCategory(filterSearch(filterPastEvents), containerPastEvents)
+    return filterCategory(filterSearch(filterPastEvents), containerPastEvents)
 }

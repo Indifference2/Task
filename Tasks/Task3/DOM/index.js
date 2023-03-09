@@ -75,6 +75,9 @@ const inputFormSearch = form[0]
 
 
 inputFormSearch.addEventListener('input', (e) =>{
+    if(filterCategory(filterSearch(infoEvents), containerAllCards) == 0){
+        return containerAllCards.innerHTML = `<h2>Event not found</h2>`
+    }
     assignCard(filterSearchCategory(), containerAllCards)
 })
 
@@ -89,8 +92,6 @@ function filterSearch(dataEvents){
 
 
 function filterSearchCategory(){
-    if(filterCategory(filterSearch(infoEvents), containerAllCards) == 0){
-        return containerAllCards.innerHTML = `<h2>Event not found</h2>`
-    }return filterCategory(filterSearch(infoEvents), containerAllCards)
+    return filterCategory(filterSearch(infoEvents), containerAllCards)
 }
 
