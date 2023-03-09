@@ -15,15 +15,14 @@ function createCard (event){
     </div>`
 }
 
-function assignCard(array, element){
+function assignCard(arrayEvents, element){
     let templateCard = ''
-    array.forEach( info => templateCard += createCard(info))
+    arrayEvents.forEach( info => templateCard += createCard(info))
 
     element.innerHTML = templateCard 
 }
 
 assignCard(infoEvents, containerAllCards)
-
 
 const containerCategory = document.getElementById("#containerCategory")
 
@@ -54,6 +53,9 @@ const inputCheckBoxNodeList = document.querySelectorAll('.form-check-input')
 const arrayCheckBox = Array.from(inputCheckBoxNodeList)
 
 containerCategory.addEventListener('click',(e) => {
+    if(filterCategory(filterSearch(infoEvents), containerAllCards) == 0){
+        return containerAllCards.innerHTML = `<h2>Event not found</h2>`
+    }
     assignCard(filterSearchCategory(), containerAllCards)
 })
 
@@ -72,7 +74,6 @@ function filterCategory(dataEvents){
 
 const form = document.querySelector("form")
 const inputFormSearch = form[0]
-
 
 inputFormSearch.addEventListener('input', (e) =>{
     if(filterCategory(filterSearch(infoEvents), containerAllCards) == 0){
