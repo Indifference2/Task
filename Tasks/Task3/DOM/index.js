@@ -89,5 +89,8 @@ function filterSearch(dataEvents){
 
 
 function filterSearchCategory(){
-    return filterCategory(filterSearch(infoEvents), containerAllCards)
-} 
+    if(filterCategory(filterSearch(infoEvents), containerAllCards) == 0){
+        return containerAllCards.innerHTML = `<h2>Event not found</h2>`
+    }return filterCategory(filterSearch(infoEvents), containerAllCards)
+}
+
