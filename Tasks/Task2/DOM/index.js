@@ -2,6 +2,7 @@ const infoEvents = data.events
 const containerAllCards = document.getElementById("containerAllCards")
 
 
+
 function createCard (list){
     return `<div class="card text-bg-secondary" style="width: 18rem; height:23rem;">
         <img src=${list.image} class="card-img-top img_card_height" alt="concierto_musical">
@@ -27,3 +28,7 @@ function assignCard(array, element){
 }
     
 assignCard(infoEvents, containerAllCards)
+
+
+
+
