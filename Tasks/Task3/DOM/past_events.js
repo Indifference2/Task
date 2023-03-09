@@ -77,6 +77,9 @@ const form = document.querySelector("form")
 const inputFormSearch = form[0]
 
 inputFormSearch.addEventListener('input', (e) =>{
+    if(filterCategory(filterSearch(filterPastEvents), containerPastEvents) == 0){
+        return containerPastEvents.innerHTML = `<h2>Event not found</h2>`
+    }
     assignCard(filterSearchCategory(), containerPastEvents)
 })
 
