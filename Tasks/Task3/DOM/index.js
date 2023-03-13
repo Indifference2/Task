@@ -1,5 +1,35 @@
-const infoEvents = data.events
-const containerAllCards = document.getElementById("containerAllCards")
+const dataEvents = data
+const containerCards = obtainReferenceTagById("#containerAllCards")
+const containerCategory = obtainReferenceTagById("#containerCategory")
+const inputSearch = obtainReferenceTagById("#form_search")
+
+const allCategory = obtainCategories(dataEvents.events)
+const allCategoryNoRepeat = obtainCategoriesNoRepeat(allCategory)
+assignCategories(allCategoryNoRepeat, containerCategory)
+assignCard(dataEvents.events, containerCards)
+
+containerCategory.addEventListener('click',() => {
+    const crossFilter = filterEventsByValuesSearchAndCheckbox(dataEvents.events)
+    if (crossFilter == 0){
+        messageEventisNotFound()
+    }else{
+        assignCard(crossFilter,containerCards)
+    }
+})
+
+inputSearch.addEventListener('input', () =>{
+    const crossFilter = filterEventsByValuesSearchAndCheckbox(dataEvents.events)
+    if (crossFilter == 0){
+        messageEventisNotFound()
+    }else{
+        assignCard(crossFilter,containerCards)
+    }
+})
+
+function obtainReferenceTagById(id){ 
+    //id as String
+    return document.getElementById(id)
+}
 
 function createCard (event){
     return `<div class="card text-bg-secondary" style="width: 18rem; height:23rem;">
@@ -15,84 +45,83 @@ function createCard (event){
     </div>`
 }
 
-function assignCard(arrayEvents, element){
+function assignCard(events, element){
     let templateCard = ''
-    arrayEvents.forEach( info => templateCard += createCard(info))
-
+    for (item of events){
+        templateCard += createCard(item)
+    }
     element.innerHTML = templateCard 
 }
 
-assignCard(infoEvents, containerAllCards)
+function createCategory (eventCategory){
+    return`<div class="category p-md-1 height_box_category">
+            <input class="form-check-input" type="checkbox" value="${eventCategory}" id="checkbox_categories">
+            <label class="form-check-label" for="checkbox_categories">${eventCategory}</label>
+            </div>`
 
-const containerCategory = document.getElementById("#containerCategory")
+}
 
-const ObtainAllCategory = (dataEvents) => dataEvents.map(item => item.category)
-
-const allCategory =  ObtainAllCategory(infoEvents)
-
-const allCategoryNoRepeat = allCategory.filter((category, index) => allCategory.indexOf(category) === index)
-
-const createCategory = (eventsCategory) => 
-`<div class="category p-md-1 height_box_category">
-    <input class="form-check-input" type="checkbox" value="${eventsCategory}" id="checkbox_categories">
-    <label class="form-check-label" for="checkbox_categories">${eventsCategory}</label>
-</div>
-`   
-
-function assignCategory(eventsArray, element){
+function assignCategories(events, element){
     let templateCategory = "";
-    for (let category of eventsArray){
+    for (let category of events){
         templateCategory += createCategory(category)
     }
     element.innerHTML = templateCategory;
 }
 
-assignCategory(allCategoryNoRepeat, containerCategory)
-
-const inputCheckBoxNodeList = document.querySelectorAll('.form-check-input')
-const arrayCheckBox = Array.from(inputCheckBoxNodeList)
-
-containerCategory.addEventListener('click',(e) => {
-    if(filterCategory(filterSearch(infoEvents), containerAllCards) == 0){
-        return containerAllCards.innerHTML = `<h2>Event not found</h2>`
-    }
-    assignCard(filterSearchCategory(), containerAllCards)
-})
-
-function filterCategory(dataEvents){
-    const checkStatusCheckBox = arrayCheckBox.filter(checkbox => checkbox.checked)
-    const checkBoxValues = checkStatusCheckBox.map(checkbox => checkbox.value)
-
-    if (checkStatusCheckBox == 0){
-        return dataEvents
-    }else{
-        return dataEvents.filter(item =>{
-            return (checkBoxValues.includes(item.category))
-        }) 
-    }
+function obtainCategories (events){
+    return events.map(item => item.category)
 }
 
-const form = document.querySelector("form")
-const inputFormSearch = form[0]
-
-inputFormSearch.addEventListener('input', (e) =>{
-    if(filterCategory(filterSearch(infoEvents), containerAllCards) == 0){
-        return containerAllCards.innerHTML = `<h2>Event not found</h2>`
-    }
-    assignCard(filterSearchCategory(), containerAllCards)
-})
-
-function filterSearch(dataEvents){
-    const wordInputSearch = inputFormSearch.value.toLowerCase()
-    if (wordInputSearch === 0){
-        return dataEvents
-    }else{
-        return(infoEvents.filter(item => item.name.toLowerCase().includes(wordInputSearch))) 
-    }
+function obtainCategoriesNoRepeat(categories){
+    return categories.filter((item, index) => categories.indexOf(item) === index)
 }
 
+function checkBoxsChecked(checkboxs){
+    return checkboxs.filter(item => item.checked)
+}
 
-function filterSearchCategory(){
-    return filterCategory(filterSearch(infoEvents), containerAllCards)
+function valueCheckboxChecked(checkboxsChecked){
+    return checkboxsChecked.map(item => item.value)
+}
+
+function isValueInEventCategory(event, value){
+    return value.includes(event.category)
+}
+
+function filterEventByValueCheckBox(events){
+    const InputCheckBoxs = Array.from(document.querySelectorAll('.form-check-input'))
+    const checkBoxsCheck = checkBoxsChecked(InputCheckBoxs)
+    const valuesCheckboxChecked = valueCheckboxChecked(checkBoxsCheck)
+    if (valuesCheckboxChecked == 0){
+        return events
+    }
+    return events.filter((item) =>{
+        return isValueInEventCategory(item, valuesCheckboxChecked)
+    }) 
+}
+
+function getValueInputSearch(inputSearch){
+    return inputSearch.value.toLowerCase()
+}
+
+function isValueInEventName(event, value){
+    return event.name.toLowerCase().includes(value)
+}
+
+function filterEventByValueSearch(event){
+    const valueSearch = getValueInputSearch(inputSearch)
+    if (valueSearch == 0){
+        return event
+    }
+    return event.filter(item => isValueInEventName(item, valueSearch))
+}
+
+function filterEventsByValuesSearchAndCheckbox(event){
+    return filterEventByValueCheckBox(filterEventByValueSearch(event))
+}
+
+function messageEventisNotFound(){
+    return containerCards.innerHTML = "<h2>Sorry, the event is not found, check your filters </h2>"
 }
 
