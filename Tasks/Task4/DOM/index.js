@@ -1,15 +1,14 @@
 
-const containerCards = obtainReferenceTagById("#containerAllCards")
-const containerCategory = obtainReferenceTagById("#containerCategory")
-const inputSearch = obtainReferenceTagById("#form_search")
+const containerCards = document.getElementById("#containerAllCards")
+const containerCategory = document.getElementById("#containerCategory")
+const inputSearch = document.getElementById("#form_search")
 
 
 fetch("https://mindhub-xj03.onrender.com/api/amazing")
 .then(response => response.json())
 .then(dataEvents =>{ 
 
-    const allCategories = obtainCategories(dataEvents.events)
-    const allCategoriesNoRepeat = obtainCategoriesNoRepeat(allCategories)
+    const allCategoriesNoRepeat = obtainCategoriesNoRepeat(dataEvents.events)
     assignCategories(allCategoriesNoRepeat, containerCategory)
     assignCard(dataEvents.events, containerCards)
     
@@ -34,10 +33,6 @@ fetch("https://mindhub-xj03.onrender.com/api/amazing")
 )
 .catch(error => console.log(error))
 
-function obtainReferenceTagById(id){ 
-    //id as String
-    return document.getElementById(id)
-}
 
 function createCard (event){
     return `<div class="card text-bg-secondary" style="width: 18rem; height:23rem;">
@@ -66,7 +61,6 @@ function createCategory (eventCategory){
             <input class="form-check-input" type="checkbox" value="${eventCategory}" id="checkbox_categories">
             <label class="form-check-label" for="checkbox_categories">${eventCategory}</label>
             </div>`
-
 }
 
 function assignCategories(events, element){
@@ -77,20 +71,9 @@ function assignCategories(events, element){
     element.innerHTML = templateCategory;
 }
 
-function obtainCategories (events){
-    return events.map(item => item.category)
-}
-
-function obtainCategoriesNoRepeat(categories){
-    return categories.filter((item, index) => categories.indexOf(item) === index)
-}
-
-function checkBoxsChecked(checkboxs){
-    return checkboxs.filter(item => item.checked)
-}
-
-function valueCheckboxChecked(checkboxsChecked){
-    return checkboxsChecked.map(item => item.value)
+function obtainCategoriesNoRepeat(events){
+    const allCategories = events.map(item => item.category)
+    return allCategories.filter((item, index) => allCategories.indexOf(item) === index)
 }
 
 function isValueInEventCategory(event, value){
@@ -98,9 +81,9 @@ function isValueInEventCategory(event, value){
 }
 
 function filterEventByValueCheckBox(events){
-    const InputCheckBoxs = Array.from(document.querySelectorAll('.form-check-input'))
-    const checkBoxsCheck = checkBoxsChecked(InputCheckBoxs)
-    const valuesCheckboxChecked = valueCheckboxChecked(checkBoxsCheck)
+    const inputCheckBoxs = Array.from(document.querySelectorAll('.form-check-input'))
+    const checkBoxsChecked = inputCheckBoxs.filter(item => item.checked)
+    const valuesCheckboxChecked = checkBoxsChecked.map(item => item.value)
     if (valuesCheckboxChecked == 0){
         return events
     }
@@ -109,20 +92,12 @@ function filterEventByValueCheckBox(events){
     }) 
 }
 
-function getValueInputSearch(inputSearch){
-    return inputSearch.value.toLowerCase()
-}
-
-function isValueInEventName(event, value){
-    return event.name.toLowerCase().includes(value)
-}
-
 function filterEventByValueSearch(event){
-    const valueSearch = getValueInputSearch(inputSearch)
-    if (valueSearch == 0){
+    const valueInputSearch = inputSearch.value.toLowerCase()
+    if (valueInputSearch == 0){
         return event
     }
-    return event.filter(item => isValueInEventName(item, valueSearch))
+    return event.filter(item => item.name.toLowerCase().includes(valueInputSearch))
 }
 
 function filterEventsByValuesSearchAndCheckbox(event){
